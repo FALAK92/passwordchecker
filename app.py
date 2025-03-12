@@ -1,5 +1,6 @@
 import re
 import streamlit as st
+import time
 
 def check_password_strength(password):
     strength = 0
@@ -35,8 +36,33 @@ def check_password_strength(password):
 def main():
     st.set_page_config(page_title="Fortify Password Analyzer", page_icon="🔒", layout="centered")
     
+    st.markdown(
+        """
+        <style>
+            body {
+                background-color: #1E1E2E;
+                color: white;
+            }
+            .stTextInput, .stButton>button {
+                border-radius: 10px;
+            }
+            .stButton>button {
+                background: linear-gradient(to right, #ff416c, #ff4b2b);
+                color: white;
+                font-size: 18px;
+                padding: 10px;
+                transition: transform 0.2s;
+            }
+            .stButton>button:hover {
+                transform: scale(1.05);
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    
     st.markdown("""
-        <h1 style='text-align: center; color: #4CAF50;'>🔐 Fortify Password Analyzer</h1>
+        <h1 style='text-align: center; color: #FFA500;'>🔐 Fortify Password Analyzer</h1>
         <p style='text-align: center; font-size: 18px;'>Check your password strength and get personalized security suggestions.</p>
     """, unsafe_allow_html=True)
     
@@ -46,12 +72,16 @@ def main():
     
     if st.button("🔍 Analyze Password", use_container_width=True):
         if password:
+            with st.spinner("Analyzing Password..."):
+                time.sleep(1.5)
+            
             strength, remarks = check_password_strength(password)
             
             st.divider()
             
             if strength == 5:
                 st.success("✅ Strong Password: Your password is highly secure!")
+                st.balloons()
             elif strength >= 3:
                 st.warning("⚠️ Moderate Password: You can improve security with a few tweaks.")
             else:
@@ -65,4 +95,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
